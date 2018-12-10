@@ -10,16 +10,17 @@ class NewsResults extends Component{
             tags: [{'webTitle':''},{'webTitle':''},{'webTitle':''}]
         }];
         results = this.props.results !==null ? results = this.props.results : results;
-        console.log(this.props)
         return(
         
             <Grid>
             { results.length!==0 ?
               results.map((res, index)=>
-                    <Row className="show-grid"  key={index}>
+                    <Row className="show-grid thumbnail resultRow"  key={index}>
                         <Col xs={12} md={4}>
                             <div className="profile">
-                            <a href={res.webUrl}><Image src={res.fields.thumbnail} thumbnail /></a>
+                            <a href={res.webUrl}>
+                                <Image src={res.fields.thumbnail ? res.fields.thumbnail :  require('../resources/loading.gif') } thumbnail/>
+                            </a>
                             </div>
                         </Col>
                         <Col xs={12} md={8} >
@@ -36,12 +37,9 @@ class NewsResults extends Component{
                         </Col>
                     </Row>
                 )
-                : <h5>Sorry, no results found !, please try again.</h5>  
+                : <div className="show-grid thumbnail resultRow" style={{background:'lightgoldenrodyellow'}}><h4>Sorry, no results found !</h4></div>  
             }
-          </Grid>
-          
-        
-          
+          </Grid> 
         )
     }
 }

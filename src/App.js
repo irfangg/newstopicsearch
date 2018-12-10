@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Search from './components/Search';
-import ErrorBoundary from './exception/ErrorBoundary';
 import './App.css';
+import ErrorBoundary from './exception/ErrorBoundary';
 
 class App extends Component{   
     render(){ 
         return(
-          <ErrorBoundary>
-            <Search />
-          </ErrorBoundary>
-          
+            <ErrorBoundary>
+              <Search />
+            </ErrorBoundary>
+                      
         );
     }
 }

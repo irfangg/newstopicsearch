@@ -12,17 +12,23 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+body{
+  background: whitesmoke;
+}
 label{
   border: 1px solid;
+  border-radius: 6px;
   padding: 4px;
   box-shadow: 3px 3px #888888;
   width:-webkit-fill-available;
   cursor: pointer;
 }
 .keywords:active{
-  border: 2px solid #888888;
+  border: 3px solid #070606;
   padding: 4px;
   border-radius: 6px;
   box-shadow: none;
+}
+.resultRow{
+  box-shadow: 6px 7px #8888;
 }

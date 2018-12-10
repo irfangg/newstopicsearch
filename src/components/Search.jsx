@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {FormGroup, FormControl, InputGroup, Glyphicon} from 'react-bootstrap';
 import NewsResults from './NewsResults';
+import {BASE_URL,API_KEY,urlFields} from './constants';
 //import Suggestions from './Suggestions';
 
 class Search extends Component {
@@ -8,40 +9,49 @@ class Search extends Component {
         super(props);
         this.state = {
             query:'',
-            results:null
+            results:null,
+            errFound:false
         }
         this.search = this.search.bind(this);
         this.keySearchHandler = this.keySearchHandler.bind(this);
     }
-    
+    componentDidMount(){
+        const query = localStorage.getItem("query")!==""? JSON.parse(localStorage.getItem("query")) : "";
+        const results = localStorage.getItem("results")!==""? JSON.parse(localStorage.getItem("results")) : null;
+        this.setState({query,results})
+    }
     search(){
-        const BASE_URL ='http://content.guardianapis.com/search';
-        const API_KEY = 'test';
-        const otherFields = '&show-fields=thumbnail,headline&show-tags=keyword&page=1&page-size=10';
-    
-        const searchTopic = `${BASE_URL}?api-key=${API_KEY}&q=${this.state.query}${otherFields}`;
-      console.log(searchTopic);
+       const searchTopic = `${BASE_URL}?api-key=${API_KEY}&q=${this.state.query}${urlFields}`;
        fetch(searchTopic,{
            method:'GET'
        })
        .then(response => response.json())
        .then(json => {
            this.setState({results:json.response.results});
-           console.log(this.state)
-           
+           localStorage.setItem("query",JSON.stringify(this.state.query));
+           localStorage.setItem("results",JSON.stringify(json.response.results));
        })
        .catch(err => console.log("error : ",err));
        
     }
 
     keySearchHandler(key){
-        console.log(key);
-        this.setState({query:key});
-        console.log(this.state)
-        this.search();
+       const searchTopic = `${BASE_URL}?api-key=${API_KEY}&q=${key}${urlFields}`;
+       fetch(searchTopic,{
+           method:'GET'
+       })
+       .then(response => response.json())
+       .then(json => {
+           this.setState({query:key,results:json.response.results});
+           localStorage.setItem("query",JSON.stringify(key));
+           localStorage.setItem("results",JSON.stringify(json.response.results));
+       })
+       .catch(err => console.log("error : ",err));
     }
+
     render(){
         return(
+            
             <div className="App">
                <div className="App-title">
                     <h1 style={{color:'darkgray'}}>News Lister</h1>
@@ -66,7 +76,8 @@ class Search extends Component {
                {this.state.results!==null?
                <NewsResults results={this.state.results}
                    keySearchHandler={this.keySearchHandler}
-               />:null
+               />
+               :null
                }
             </div>
             
